@@ -20,19 +20,27 @@ module GameOfLife
       neighbors.select { |value| value }.length
     end
 
-    def neighbors
-      local_neighbors = []
-      local_neighbors << @cells[row_index-1][cell_index-1]                                 1]
-      local_neighbors << @cells[row_index-1][cell_index]
-      local_neighbors << @cells[row_index-1][cell_index+1]
+    def neighbors(row, col)
+      n = []
 
-      local_neighbors << @cells[row_index][cell_index-1]
-      local_neighbors << @cells[row_index][cell_index+1]
+      prev_row = [row-1, 0].max
+      next_row = [row+1, cells.length].min
+      prev_row = [col-1, 0].max
+      next_row = [col+1, cells.first.length].min
 
-      local_neighbors << @cells[row_index+1][cell_index-1]                                 1]
-      local_neighbors << @cells[row_index+1][cell_index]
-      local_neighbors << @cells[row_index+1][cell_index+1]
-      local_neighbors
+      n << [prev_row, prev_col]
+      n << [prev_row, col]
+      n << [prev_row, next_col]
+      n << [row, prev_col]
+      n << [row, next_col]
+      n << [next_row, prev_col]
+      n << [next_row, col]
+      n << [next_row, next_col]
+
+      n.uniq!
+      n.map do |row, col|
+        cells[row][col]
+      end
     end
 
   end
