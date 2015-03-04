@@ -5,6 +5,21 @@ module GameOfLife
       @cells = cells
     end
 
+    DIE = ->(cell) { false }
+    ALIVE_IF_DEAD = -> (cell) { !cell }
+    STAY_ALIVE = -> (cell) { cell }
+
+    OPERATIONS = [
+      DIE,
+      DIE,
+      DIE,
+      ALIVE_IF_DEAD,
+      STAY_ALIVE,
+      DIE,
+      DIE,
+      DIE,
+      DIE
+    ]
 
     # executes each tick
     def update
@@ -12,8 +27,9 @@ module GameOfLife
       cells.each_with_index do |row, row_index|
         new_row = []
         row.each_with_index do |cell, cell_index|
-          count_live_neighbors(row_index, cell_index)
-          new_row << true
+          count = count_live_neighbors(row_index, cell_index)
+          proc = OPERATIONS[count]
+          new_row << proc.call(cell)
         end
         new_cells << new_row
       end
