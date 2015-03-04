@@ -5,6 +5,7 @@ module GameOfLife
       @cells = cells
     end
 
+
     # executes each tick
     def update
       new_cells = []
