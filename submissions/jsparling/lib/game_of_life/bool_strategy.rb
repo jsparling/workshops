@@ -7,11 +7,17 @@ module GameOfLife
 
     # executes each tick
     def update
+      new_cells = []
       cells.each_with_index do |row, row_index|
+        new_row = []
         row.each_with_index do |cell, cell_index|
           count_live_neighbors(row_index, cell_index)
+          new_row << true
         end
+        new_cells << new_row
       end
+
+      self.cells = new_cells
     end
 
     def count_live_neighbors(row_index, cell_index)
