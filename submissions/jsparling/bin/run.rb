@@ -4,8 +4,8 @@ $:.unshift File.expand_path('../../lib', __FILE__)
 require 'game_of_life'
 
 board = []
-row_count = 100
-col_count = 100
+row_count = 50
+col_count = 50
 row_count.times do
   row = []
   col_count.times do

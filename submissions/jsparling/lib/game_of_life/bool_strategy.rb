@@ -38,8 +38,6 @@ module GameOfLife
     end
 
     def count_live_neighbors(row_index, cell_index)
-
-
       neighbors(row_index, cell_index).select { |value| value }.length
     end
 
