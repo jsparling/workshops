@@ -12,9 +12,9 @@ module GameOfLife
     OPERATIONS = [
       DIE,
       DIE,
-      DIE,
-      ALIVE_IF_DEAD,
       STAY_ALIVE,
+      ALIVE_IF_DEAD,
+      DIE,
       DIE,
       DIE,
       DIE,
@@ -40,16 +40,16 @@ module GameOfLife
     def count_live_neighbors(row_index, cell_index)
 
 
-      neighbors.select { |value| value }.length
+      neighbors(row_index, cell_index).select { |value| value }.length
     end
 
     def neighbors(row, col)
       n = []
 
       prev_row = [row-1, 0].max
-      next_row = [row+1, cells.length].min
-      prev_row = [col-1, 0].max
-      next_row = [col+1, cells.first.length].min
+      next_row = [row+1, cells.length-1].min
+      prev_col = [col-1, 0].max
+      next_col = [col+1, cells.first.length-1].min
 
       n << [prev_row, prev_col]
       n << [prev_row, col]
