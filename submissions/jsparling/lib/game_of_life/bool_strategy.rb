@@ -59,17 +59,13 @@ module GameOfLife
     end
 
     def count_live_neighbors(row_index, cell_index)
-
       count = neighbors(row_index, cell_index).select { |value| value }.length
-      # puts count
-      # count
-      # subtract self if value = true
     end
 
     def neighbors(row, col)
       n = []
 
-      # Put cell in first, so we can pop it later
+      # Put cell in first, so we can shift it off later
       n << [row,col]
 
       prev_row = [row-1, 0].max
@@ -82,18 +78,14 @@ module GameOfLife
       n << [prev_row, next_col]
       n << [row, prev_col]
       n << [row, next_col]
-      # TODO add self
       n << [next_row, prev_col]
       n << [next_row, col]
       n << [next_row, next_col]
 
       n.uniq!
 
+      # remove self
       n.shift
-
-      # remove self from list, only relevant on edges.
-      # FIXME: this works, but is a conditional
-      # n.delete_if { |x| x == [row,col] }
 
       n.map do |row, col|
         cells[row][col]
