@@ -44,26 +44,33 @@ module GameOfLife
 
     # executes each tick
     def update
-        new_cells = []
-        cells.each_with_index do |row, row_index|
-          new_row = []
-          row.each_with_index do |cell, cell_index|
-            count = count_live_neighbors(row_index, cell_index)
-            proc = OPERATIONS[count]
-            new_row << proc.call(cell)
-          end
-          new_cells << new_row
+      new_cells = []
+      cells.each_with_index do |row, row_index|
+        new_row = []
+        row.each_with_index do |cell, cell_index|
+          count = count_live_neighbors(row_index, cell_index)
+          proc = OPERATIONS[count]
+          new_row << proc.call(cell)
         end
+        new_cells << new_row
+      end
 
-        @cells = new_cells
+      @cells = new_cells
     end
 
     def count_live_neighbors(row_index, cell_index)
-      neighbors(row_index, cell_index).select { |value| value }.length
+
+      count = neighbors(row_index, cell_index).select { |value| value }.length
+      # puts count
+      # count
+      # subtract self if value = true
     end
 
     def neighbors(row, col)
       n = []
+
+      # Put cell in first, so we can pop it later
+      n << [row,col]
 
       prev_row = [row-1, 0].max
       next_row = [row+1, cells.length-1].min
@@ -75,11 +82,19 @@ module GameOfLife
       n << [prev_row, next_col]
       n << [row, prev_col]
       n << [row, next_col]
+      # TODO add self
       n << [next_row, prev_col]
       n << [next_row, col]
       n << [next_row, next_col]
 
       n.uniq!
+
+      n.shift
+
+      # remove self from list, only relevant on edges.
+      # FIXME: this works, but is a conditional
+      # n.delete_if { |x| x == [row,col] }
+
       n.map do |row, col|
         cells[row][col]
       end
