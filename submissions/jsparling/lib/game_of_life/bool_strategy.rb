@@ -5,8 +5,29 @@ module GameOfLife
       @cells = cells
     end
 
+    def self.convert_pattern(pattern)
+      return_array = []
+
+      pattern.split("\n").each do |row|
+        return_array << convert_row(row)
+      end
+
+      return_array
+    end
+
+    def self.convert_row(row)
+      row.gsub!(' ','') # this allows us to indent the pattern
+      row.chars.map do |value|
+        if value == "0"
+          true
+        elsif value == "."
+          false
+        end
+      end
+    end
+
     DIE = ->(cell) { false }
-    ALIVE_IF_DEAD = -> (cell) { !cell }
+    ALIVE_IF_DEAD = -> (cell) { true }
     STAY_ALIVE = -> (cell) { cell }
 
     OPERATIONS = [
@@ -23,18 +44,18 @@ module GameOfLife
 
     # executes each tick
     def update
-      new_cells = []
-      cells.each_with_index do |row, row_index|
-        new_row = []
-        row.each_with_index do |cell, cell_index|
-          count = count_live_neighbors(row_index, cell_index)
-          proc = OPERATIONS[count]
-          new_row << proc.call(cell)
+        new_cells = []
+        cells.each_with_index do |row, row_index|
+          new_row = []
+          row.each_with_index do |cell, cell_index|
+            count = count_live_neighbors(row_index, cell_index)
+            proc = OPERATIONS[count]
+            new_row << proc.call(cell)
+          end
+          new_cells << new_row
         end
-        new_cells << new_row
-      end
 
-      self.cells = new_cells
+        @cells = new_cells
     end
 
     def count_live_neighbors(row_index, cell_index)
